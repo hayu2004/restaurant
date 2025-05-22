@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #fcefee, #e6f0ff);
+        }
+        header {
+            background-color: #ff85a2;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+        nav {
+            background-color: #ffc4dd;
+            padding: 15px;
+            text-align: center;
+            border-bottom: 2px dashed #ff9bbd;
+        }
+        nav a {
+            color: #fff;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+            background-color: #ff9bbd;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: 0.3s;
+        }
+        nav a:hover {
+            background-color: #ff7ca8;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 25px;
+            background-color: #fff0f5;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(255, 100, 150, 0.1);
+        }
+        h1, h2 {
+            color: #ff5c8a;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+        .stat-card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(255, 150, 200, 0.2);
+            transition: transform 0.2s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-card h3 {
+            margin-top: 0;
+            color: #ff69b4;
+        }
+        .stat-card p {
+            font-size: 26px;
+            font-weight: bold;
+            color: #333;
+        }
+        .stat-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+            color: #ff8ab8;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Manage Dashboard</h1>
+    </header>
+    <nav>
+        <a href="{% url 'staff_manager_dashboard' %}">🏠 Tổng Quan</a>
+        <a href="#">🚪 Đăng xuất</a>
+    </nav>
+    <div class="container">
+        <h2>Xin chào, {{ request.user.username }}! 💖</h2>
+        <p>Welcome</p>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <h3>Tổng Khách Hàng</h3>
+                <p>{{ total_customers }}</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-receipt"></i></div>
+                <h3>Tổng Đơn Hàng</h3>
+                <p>{{ total_orders }}</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-chair"></i></div>
+                <h3>Tổng Số Bàn</h3>
+                <p>{{ total_tables }}</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-coffee"></i></div>
+                <h3>Bàn Còn Trống</h3>
+                <p>{{ available_tables }}</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-money-bill-wave"></i></div>
+                <h3>Doanh Thu</h3>
+                <p>{{ total_revenue|floatformat:0 }} VNĐ</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

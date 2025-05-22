@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Đặt bàn thành công{% endblock %}
+{% block content %}
+<section class="booking-page">
+    <div class="booking-form">
+        <h2>✅ Đặt bàn thành công!</h2>
+        <p>Khách hàng: <strong>{{ customer.full_name }}</strong></p>
+        <p>Số lượng người: {{ number_of_guests }}</p>
+        <p>Thời gian: {{ booking_time }} → {{ end_time }}</p>
+        <p>Nhân viên sẽ xác nhận bàn cho bạn sớm nhất có thể.</p>
+        <a href="{% url 'home' %}" class="booking-button">Về trang chủ</a>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,166 @@
+{% load static %}
+{% load humanize %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhà hàng</title>
+    <link rel="stylesheet" href="{% static 'styles/main.css' %}">
+
+    <link rel ="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+</head>
+<body>
+
+<!-- header section start -->
+
+<header>
+
+    <input type="checkbox" name="" id="toggler">
+    <label for="toggler" class="fas fa-bars"></label>
+    <div class="lo">
+        <img src="{% static 'images/logo.jpg' %}">
+    </div>
+    <a href="{% static 'home' %}" class="logo">Techbep<span>Collection</span></a>
+
+    <nav class="navbar">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'menu' %}">Menu</a>  
+        <a href="{% url 'tables' %}">Đặt bàn</a>
+        <a href="{% url 'about' %}">About</a>
+        <a href="{% url 'review' %}">Đánh giá</a>
+    </nav>
+
+    <div class="icons">
+        <input type="text" placeholder="Tìm kiếm"> <i class="fas fa-search"></i>
+        <a href="{% url 'add_to_cart' %}" class="fas fa-shopping-cart"></a>
+        <a href="{% url 'user' %}" class="fas fa-user"></a>
+
+</header>
+
+<!-- header section ends -->
+
+<!-- Cartegory starts -->
+
+<section id="category">
+
+    <!--box1-->
+    <a href="#" class="category-box">
+        <!--img-->
+        <div class="category-box-img">
+            <img src="{% static 'images/c1.png' %}" alt="canh">
+        </div>
+        <!--text-->
+        <strong>Món nước</strong>
+    </a>
+
+    <!--box2-->
+    <a href="#" class="category-box">
+        <!--img-->
+        <div class="category-box-img">
+            <img src="{% static 'images/c2.png' %}" alt="món chính">
+        </div>
+        <!--text-->
+        <strong>Món mặn</strong>
+    </a>
+
+    <!--box3-->
+    <a href="#" class="category-box">
+        <!--img-->
+        <div class="category-box-img">
+            <img src="{% static 'images/c3.png' %}" alt="rau">
+        </div>
+        <!--text-->
+        <strong>Rau củ</strong>
+    </a>
+
+    <!--box4-->
+    <a href="#" class="category-box">
+        <!--img-->
+        <div class="category-box-img">
+            <img src="{% static 'images/c4.png' %}" alt="đồ ngọt">
+        </div>
+        <!--text-->
+        <strong>Tráng miệng</strong>
+    </a>
+
+    <!--box5-->
+    <a href="#" class="category-box">
+        <!--img-->
+        <div class="category-box-img">
+            <img src="{% static 'images/c5.png' %}" alt="nước uống">
+        </div>
+        <!--text-->
+        <strong>Đồ uống</strong>
+    </a>
+
+    <!--box6-->
+    <a href="#" class="category-box">
+        <!--img-->
+        <div class="category-box-img">
+            <img src="{% static 'images/c6.png' %}" alt="All">
+        </div>
+        <!--text-->
+        <strong>Tất cả</strong>
+    </a>
+
+</section>
+
+<!-- Cartegory ends-->
+
+<section>
+
+    <h2>Món ăn mới</h2>
+
+    <div class="popular-dress-container"></div>
+        <div class="popular-product-container">
+            {% for dish in new_dishes %}
+                <div class="product-box">
+                    <a href="#" class="product-box-img">
+                        <img src="{{ dish.image.url }}" alt="{{ dish.name }}">
+                        <span>New</span>
+                    </a>
+                    <div class="product-box-text">
+                        <a href="#" class="product-text-title">{{ dish.name }}</a>
+                        <span>Giá: {{ dish.price|intcomma }}đ</span>
+                        <a href="#" class="product-cart-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2 7h13l3 9H8"></path></svg>
+                            Đặt
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <p>Chưa có món mới nào.</p>
+                {% endfor %}
+            <div class="popular-banner">
+                <!--text-->
+                <div class="popular-banner-text">
+                    <h3>Event</h3>
+                    <a>Hóa đơn trên 1 triệu - giảm giá 10%</a>
+                </div>
+                <div class="popular-banner-img">
+                    <img src="{% static 'images/banner.png' %}" alt="Banner"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- footer section starts  -->
+
+ <footer>
+    <div class="end">
+        <p>📍 Địa chỉ: 123 Đường ABC, Quận XYZ, Hà Nội, Việt Nam</p>
+        <p>📞 Số điện thoại: 0123 456 789</p>
+        <p>📧 Email: contact@cuahang.com</p>
+        <p>🕒 Giờ mở cửa: 8:00 AM - 10:00 PM</p>
+    </div>
+</footer>
+
+<!-- footer section ends -->
+
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Web Page</title>
+    <link rel="stylesheet" href="../styles/main.css">
+
+    <link rel ="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+</head>
+<body class="auth-page">
+
+<!-- header section start -->
+
+<header>
+
+    <input type="checkbox" name="" id="toggler">
+    <label for="toggler" class="fas fa-bars"></label>
+    <div class="lo">
+        <img src="../images/logo.webp">
+    </div>
+    <a href="#" class="logo">Techbep<span>Collection</span></a>
+
+    <nav class="navbar">
+        <a href="home.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="category.html">Sản phẩm</a>
+        <a href="creat.html">Đặt riêng</a>
+        <a href="review.html">Đánh giá</a>
+    </nav>
+
+    <div class="icons">
+        <input type="text" placeholder="Tìm kiếm"> <i class="fas fa-search"></i>
+        <a href="cart.html" class="fas fa-shopping-cart"></a>
+        <a href="user.html" class="fas fa-user"></a>
+
+</header>
+
+<!-- header section ends -->
+
+<!--Login and Signup-->
+
+<div class="form">
+    <!--Login-->
+    <div class="login-form">
+        <a href="javascript:void(0);" class="form-cancel">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </a>
+        <strong>Log In</strong>
+        <form>
+            <input type="email" name="email" placeholder="Example@gmail.com" required/>
+            <input type="password" name="password" placeholder="Password" required/>
+            <input type="submit" value="Log In"/>
+        </form>
+        <div class="form-btns">
+            <a href="#" class="forget">Quên mật khẩu</a>
+            <a href="javascript:void(0);" class="sign-up-btn">Tạo tài khoản</a>
+        </div>
+    </div>
+
+    <!--Signup-->
+    <div class="signup-form">
+        <a href="javascript:void(0);" class="form-cancel">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </a>
+        <strong>Sign Up</strong>
+        <form>
+            <input type="text" name="fullname" placeholder="Full Name" required/>
+            <input type="text" name="phone" placeholder="Phone Number" required/>
+            <input type="email" name="email" placeholder="Example@gmail.com" required/>
+            <input type="password" name="password" placeholder="Password" required/>
+            <input type="submit" value="Sign Up"/>
+        </form>
+        <div class="form-btns">
+            <a href="javascript:void(0);" class="already-account">Đã có tài khoản?</a>
+        </div>
+    </div>
+
+    <!-- Forgot Password Form -->
+<div class="forgot-password-form">
+    <a href="javascript:void(0);" class="form-cancel">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </a>
+    <strong>Forgot Password</strong>
+    <form>
+        <input type="email" name="email" placeholder="Enter your email" required/>
+        <input type="new-password" name="new-password" placeholder="Enter your new password" required/>
+        <input type="again" name="again_new_password" placeholder="Repeat password" required/>
+        <input type="submit" value="Reset Password"/>
+    </form>
+    <div class="form-btns">
+        <a href="javascript:void(0);" class="back-to-login">Quay lại đăng nhập</a>
+    </div>
+</div>
+
+</div>
+
+<script>
+    // Lấy các phần tử DOM
+    const signUpBtn = document.querySelector('.sign-up-btn'); // Nút "Tạo tài khoản"
+    const signUpForm = document.querySelector('.signup-form'); // Form đăng ký
+    const loginForm = document.querySelector('.login-form'); // Form đăng nhập
+    const forgotPasswordLink = document.querySelector('.forget'); // Link "Quên mật khẩu"
+    const forgotPasswordForm = document.querySelector('.forgot-password-form'); // Form quên mật khẩu
+
+    // Đặt trạng thái mặc định (chỉ hiển thị form đăng nhập)
+    signUpForm.style.display = 'none'; // Form đăng ký bị ẩn
+    loginForm.style.display = 'block'; // Form đăng nhập hiển thị
+
+    // Khi nhấn vào nút "Tạo tài khoản"
+    signUpBtn.addEventListener('click', function() {
+        signUpForm.style.display = 'block'; // Hiển thị form đăng ký
+        loginForm.style.display = 'none';  // Ẩn form đăng nhập
+    });
+
+    // Khi nhấn nút "X" trong form đăng ký
+    const closeSignUp = signUpForm.querySelector('.form-cancel');
+    closeSignUp.addEventListener('click', function() {
+        signUpForm.style.display = 'none'; // Ẩn form đăng ký
+        loginForm.style.display = 'block'; // Hiển thị lại form đăng nhập
+    });
+
+    // Khi nhấn vào "Quên mật khẩu"
+    forgotPasswordLink.addEventListener('click', function() {
+        forgotPasswordForm.style.display = 'block'; // Hiển thị form quên mật khẩu
+        loginForm.style.display = 'none'; // Ẩn form đăng nhập
+    });
+
+    // Khi nhấn vào nút "X" trong form quên mật khẩu
+    const closeForgotPassword = forgotPasswordForm.querySelector('.form-cancel');
+    closeForgotPassword.addEventListener('click', function() {
+        forgotPasswordForm.style.display = 'none'; // Ẩn form quên mật khẩu
+        loginForm.style.display = 'block'; // Hiển thị lại form đăng nhập
+    });
+
+    // Khi nhấn "Quay lại đăng nhập"
+    const backToLogin = forgotPasswordForm.querySelector('.back-to-login');
+    backToLogin.addEventListener('click', function() {
+        forgotPasswordForm.style.display = 'none'; // Ẩn form quên mật khẩu
+        loginForm.style.display = 'block'; // Hiển thị lại form đăng nhập
+    });
+
+    // Xử lý "Đã có tài khoản?" để quay lại form đăng nhập
+    const alreadyAccount = signUpForm.querySelector('.already-account');
+    alreadyAccount.addEventListener('click', function() {
+        signUpForm.style.display = 'none'; // Ẩn form đăng ký
+        loginForm.style.display = 'block'; // Hiển thị lại form đăng nhập
+    });
+
+    // Lấy phần tử nút "X" trong form đăng nhập
+    const closeLogin = document.querySelector('.login-form .form-cancel'); // Nút "X" của form login
+
+    // Thêm sự kiện click để chuyển hướng về trang chủ
+    closeLogin.addEventListener('click', function() {
+        window.location.href = 'index.html'; // Chuyển hướng đến trang chủ
+    });
+    
+</script>
+
+</body>

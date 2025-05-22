@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Đặt bàn thất bại{% endblock %}
+
+{% block content %}
+<section class="booking-page">
+    <div class="booking-form">
+        <h2>❌ Đặt bàn thất bại</h2>
+        <p>Lý do: {{ reason }}</p>
+        <a href="{% url 'tables' %}" class="booking-button">Thử lại</a>
+    </div>
+</section>
+{% endblock %}

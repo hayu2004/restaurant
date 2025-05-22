@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Kiểm tra bàn trống{% endblock %}
+
+{% block content %}
+
+    
+    <h1>Chọn bàn để đặt</h1>
+    <div class="booking-container">
+        {% for table in tables %}
+            {% if not table.is_used %}
+                <a href="{% url 'table_order' %}" class="table available" data-table="Bàn {{ table.id }}">
+                    Bàn {{ table.id }}
+                </a>
+            {% else %}
+                <span class="table booked" data-table="Bàn {{ table.id }}">
+                    Bàn {{ table.id }}
+                </span>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+{% endblock %}
+

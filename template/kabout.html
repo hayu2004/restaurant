@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Về chúng tôi{% endblock %}
+
+{% block content %}
+
+<section class="hero text-center" aria-label="home" id="home">
+
+        <ul class="hero-slider" data-hero-slider>
+
+          <li class="slider-item active" data-hero-slider-item>
+
+            <div class="slider-bg">
+              <img src="{% static 'images/hero-slider-1.jpg' %}" width="1880" height="950" alt="" class="img-cover">
+            </div>
+
+            <p class="label-2 section-subtitle slider-reveal">Tradational & Hygine</p>
+
+            <h1 class="display-1 hero-title slider-reveal">
+              Cho tình yêu tuyệt đối <br>
+              với đồ ăn ngon!
+            </h1>
+
+            <p class="body-2 hero-text slider-reveal">
+              Hãy đến với chúng tôi và cảm nhận sự khác biệt trong từng món ăn
+            </p>
+
+            <a href="{% url 'menu' %}" class="btn btn-primary slider-reveal">
+              <span class="text text-1">View Our Menu</span>
+            </a>
+
+            </li>
+        </ul>
+
+        <button class="slider-btn prev" aria-label="slide to previous" data-prev-btn>
+          <ion-icon name="chevron-back"></ion-icon>
+        </button>
+
+        <button class="slider-btn next" aria-label="slide to next" data-next-btn>
+          <ion-icon name="chevron-forward"></ion-icon>
+        </button>
+
+        <a href="{% url 'tables' %}" class="hero-btn has-after">
+          <img src="{% static 'images/hero-icon.png' %}" width="48" height="48" alt="booking icon">
+
+          <span class="label-2 text-center span">Book</span>
+        </a>
+ 
+</section>
+<!-- about section ends -->
+<!-- event section starts  -->
+
+<section class="section event bg-black-10" aria-label="event">
+  <div class="container">
+
+    <h2 class="section-title headline-1 text-center">Upcoming Event</h2>
+
+    <ul class="grid-list">
+
+      <li>
+        <div class="event-card has-before hover:shine">
+
+          <div class="card-banner img-holder" style="--width: 350; --height: 450;">
+            <img src="{% static 'images/event-1.jpg' %}" width="350" height="450" loading="lazy"
+              alt="Flavour" class="img-cover">
+
+            <time class="publish-date label-2" datetime="2025-09-15">15/09/2025</time>
+          </div>
+
+          <div class="card-content">
+            <p class="card-subtitle label-2 text-center">Food, Flavour</p>
+
+            <h3 class="card-title title-2 text-center">
+              Hãy cảm nhận món ăn bằng tất cả các giác quan của bạn
+            </h3>
+          </div>
+
+        </div>
+        <a href="{% url 'menu' %}" class="btn btn-primary">
+      <span class="text text-1">Xem món ăn</span>
+    </a>
+      </li>
+
+      <li>
+        <div class="event-card has-before hover:shine">
+
+          <div class="card-banner img-holder" style="--width: 350; --height: 450;">
+            <img src="{% static 'images/event-2.jpg' %}" width="350" height="450" loading="lazy"
+              alt="Flavour" class="img-cover">
+
+            <time class="publish-date label-2" datetime="2025-06-07">07/06/2025</time>
+          </div>
+
+          <div class="card-content">
+            <p class="card-subtitle label-2 text-center">Healthy Food</p>
+
+            <h3 class="card-title title-2 text-center">
+              Bữa ăn lành mạnh cho sức khỏe của bạn
+            </h3>
+          </div>
+
+        </div>
+        <a href="{% url 'menu' %}" class="btn btn-primary">
+      <span class="text text-1">Xem món ăn</span>
+    </a>
+      </li>
+
+      <li>
+        <div class="event-card has-before hover:shine">
+
+          <div class="card-banner img-holder" style="--width: 350; --height: 450;">
+            <img src="{% static 'images/event-3.jpg' %}" width="350" height="450" loading="lazy"
+              alt="Flavour" class="img-cover">
+
+            <time class="publish-date label-2" datetime="2025-07-15">15/07/2025</time>
+          </div>
+
+          <div class="card-content">
+            <p class="card-subtitle label-2 text-center">Recipie</p>
+
+            <h3 class="card-title title-2 text-center">
+              Trải nghiệm món ăn mới lạ
+            </h3>
+          </div>
+
+        </div>
+        <a href="{% url 'menu' %}" class="btn btn-primary">
+      <span class="text text-1">Xem món ăn</span>
+    </a>
+      </li>
+
+    </ul>
+
+
+  </div>
+</section>
+
+{% endblock %}
