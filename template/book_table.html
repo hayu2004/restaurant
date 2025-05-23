@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Booking System - Restaurant Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .booking-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .form-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .form-column {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            color: #2c3e50;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ecf0f1;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .customer-search {
+            position: relative;
+        }
+
+        .customer-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #ecf0f1;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+        }
+
+        .customer-suggestion {
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .customer-suggestion:hover {
+            background-color: #f8f9fa;
+        }
+
+        .customer-suggestion:last-child {
+            border-bottom: none;
+        }
+
+        .table-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .table-option {
+            aspect-ratio: 1;
+            border: 3px solid #ecf0f1;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            position: relative;
+        }
+
+        .table-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-option.available {
+            border-color: #27ae60;
+            background: linear-gradient(135deg, #d5f4e6, #fafafa);
+        }
+
+        .table-option.available:hover {
+            border-color: #27ae60;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+        }
+
+        .table-option.occupied {
+            border-color: #e74c3c;
+            background: linear-gradient(135deg, #fadbd8, #fafafa);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .table-option.selected {
+            border-color: #3498db;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .table-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .table-capacity {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .table-status {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: white;
+            font-weight: 600;
+        }
+
+        .status-available {
+            background: #27ae60;
+        }
+
+        .status-occupied {
+            background: #e74c3c;
+        }
+
+        .people-selector {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .people-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .people-btn {
+            width: 35px;
+            height: 35px;
+            border: none;
+            border-radius: 50%;
+            background: #3498db;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .people-btn:hover {
+            background: #2980b9;
+            transform: scale(1.1);
+        }
+
+        .people-count {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .booking-summary {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+
+        .summary-title {
+            color: #2c3e50;
+            font-weight: 700;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(46, 204, 113, 0.3);
+        }
+
+        .submit-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        /* Success Page Styles */
+        .success-page {
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 3rem;
+            color: white;
+            animation: bounceIn 0.6s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .success-title {
+            color: #27ae60;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .success-message {
+            color: #2c3e50;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .booking-details {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+        }
+
+        .detail-item {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f8f9fa;
+        }
+
+        .detail-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .detail-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .detail-value {
+            color: #2c3e50;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        /* Error Page Styles */
+        .error-page {
+            text-align: center;
+        }
+
+        .error-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 3rem;
+            color: white;
+            animation: shakeX 0.6s ease-out;
+        }
+
+        @keyframes shakeX {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .error-title {
+            color: #e74c3c;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .error-message {
+            color: #2c3e50;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .form-section {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .table-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Booking Form Page -->
+        <div class="page active" id="booking-form">
+            <div class="booking-card">
+                <div class="header">
+                    <h1>🍽️ Table Booking System</h1>
+                    <p>Reserve a table for your customers</p>
+                </div>
+
+                <form method="POST" onsubmit="handleBookingSubmit(event)">
+                    <div class="form-section">
+                        <!-- Customer Selection -->
+                        <div class="form-column">
+                            <h3 class="section-title">
+                                👤 Customer Information
+                            </h3>
+
+                            <div class="form-group">
+                                <label for="customer" class="form-label">Select Customer</label>
+                                <div class="customer-search">
+                                    <input type="text" class="form-control" id="customer" name="customer" 
+                                           placeholder="Search customer by name or email..." 
+                                           autocomplete="off" oninput="searchCustomers(this.value)">
+                                    <div class="customer-suggestions" id="customer-suggestions"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Number of People</label>
+                                <div class="people-selector">
+                                    <span style="color: #2c3e50; font-weight: 600;">👥 Party Size:</span>
+                                    <div class="people-control">
+                                        <button type="button" class="people-btn" onclick="updatePeopleCount(-1)">-</button>
+                                        <span class="people-count" id="people-count">2</span>
+                                        <button type="button" class="people-btn" onclick="updatePeopleCount(1)">+</button>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="number_of_people" id="number_of_people" value="2">
+                            </div>
+
+                            <div class="booking-summary">
+                                <div class="summary-title">📋 Booking Summary</div>
+                                <div class="summary-item">
+                                    <span>Customer:</span>
+                                    <span id="summary-customer">Not selected</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span>Party Size:</span>
+                                    <span id="summary-people">2 people</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span>Selected Table:</span>
+                                    <span id="summary-table">Not selected</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span>Status:</span>
+                                    <span id="summary-status" style="color: #e74c3c;">Incomplete</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Table Selection -->
+                        <div class="form-column">
+                            <h3 class="section-title">
+                                🪑 Table Selection
+                            </h3>
+
+                            <div class="form-group">
+                                <label class="form-label">Available Tables</label>
+                                <p style="color: #7f8c8d; font-size: 0.9rem; margin-bottom: 15px;">
+                                    Select a table that accommodates your party size
+                                </p>
+                                
+                                <div class="table-grid" id="table-grid">
+                                    <!-- Sample tables - these would be populated from Django context -->
+                                    <div class="table-option available" data-table-id="1" data-capacity="2" onclick="selectTable(this)">
+                                        <div class="table-status status-available">✓</div>
+                                        <div class="table-number">Table 1</div>
+                                        <div class="table-capacity">2 seats</div>
+                                    </div>
+                                    <div class="table-option available" data-table-id="2" data-capacity="4" onclick="selectTable(this)">
+                                        <div class="table-status status-available">✓</div>
+                                        <div class="table-number">Table 2</div>
+                                        <div class="table-capacity">4 seats</div>
+                                    </div>
+                                    <div class="table-option occupied" data-table-id="3" data-capacity="2">
+                                        <div class="table-status status-occupied">✗</div>
+                                        <div class="table-number">Table 3</div>
+                                        <div class="table-capacity">2 seats</div>
+                                    </div>
+                                    <div class="table-option available" data-table-id="4" data-capacity="6" onclick="selectTable(this)">
+                                        <div class="table-status status-available">✓</div>
+                                        <div class="table-number">Table 4</div>
+                                        <div class="table-capacity">6 seats</div>
+                                    </div>
+                                    <div class="table-option available" data-table-id="5" data-capacity="4" onclick="selectTable(this)">
+                                        <div class="table-status status-available">✓</div>
+                                        <div class="table-number">Table 5</div>
+                                        <div class="table-capacity">4 seats</div>
+                                    </div>
+                                    <div class="table-option occupied" data-table-id="6" data-capacity="8">
+                                        <div class="table-status status-occupied">✗</div>
+                                        <div class="table-number">Table 6</div>
+                                        <div class="table-capacity">8 seats</div>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="table" id="selected_table" value="">
+                            </div>
+
+                            <button type="submit" class="submit-btn" id="submit-btn" disabled>
+                                🎯 Book Table
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Success Page -->
+        <div class="page" id="success-page">
+            <div class="booking-card success-page">
+                <div class="success-icon">
+                    ✅
+                </div>
+                <h1 class="success-title">Booking Successful!</h1>
+                <p class="success-message">
+                    The table has been successfully reserved for the customer. 
+                    The booking details have been saved and the customer will be notified.
+                </p>
+
+                <div class="booking-details">
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-icon">👤</div>
+                            <div class="detail-label">Customer</div>
+                            <div class="detail-value" id="success-customer">John Doe</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-icon">🪑</div>
+                            <div class="detail-label">Table</div>
+                            <div class="detail-value" id="success-table">Table 2</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-icon">👥</div>
+                            <div class="detail-label">Party Size</div>
+                            <div class="detail-value" id="success-people">4 People</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-icon">🕒</div>
+                            <div class="detail-label">Booking Time</div>
+                            <div class="detail-value" id="success-time">Now</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn btn-primary" onclick="newBooking()">
+                        ➕ New Booking
+                    </button>
+                    <button class="action-btn btn-secondary" onclick="viewBookings()">
+                        📋 View All Bookings
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Page -->
+        <div class="page" id="error-page">
+            <div class="booking-card error-page">
+                <div class="error-icon">
+                    ❌
+                </div>
+                <h1 class="error-title">Booking Failed</h1>
+                <p class="error-message" id="error-reason">
+                    The selected table is already booked or doesn't have enough capacity for your party size.
+                </p>
+
+                <div class="action-buttons">
+                    <button class="action-btn btn-primary" onclick="tryAgain()">
+                        🔄 Try Again
+                    </button>
+                    <button class="action-btn btn-secondary" onclick="viewAvailableTables()">
+                        🪑 View Available Tables
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample customer data - this would come from Django context
+        const customers = [
+            { id: 1, name: "John Doe", email: "john@email.com" },
+            { id: 2, name: "Jane Smith", email: "jane@email.com" },
+            { id: 3, name: "Mike Johnson", email: "mike@email.com" },
+            { id: 4, name: "Sarah Wilson", email: "sarah@email.com" },
+            { id: 5, name: "David Brown", email: "david@email.com" }
+        ];
+
+        let selectedCustomer = null;
+        let selectedTable = null;
+        let peopleCount = 2;
+
+        // Customer search functionality
+        function searchCustomers(query) {
+            const suggestions = document.getElementById('customer-suggestions');
+            
+            if (query.length < 2) {
+                suggestions.style.display = 'none';
+                return;
+            }
+
+            const filtered = customers.filter(customer => 
+                customer.name.toLowerCase().includes(query.toLowerCase()) ||
+                customer.email.toLowerCase().includes(query.toLowerCase())
+            );
+
+            if (filtered.length > 0) {
+                suggestions.innerHTML = filtered.map(customer => 
+                    `<div class="customer-suggestion" onclick="selectCustomer(${customer.id}, '${customer.name}', '${customer.email}')">
+                        <strong>${customer.name}</strong><br>
+                        <small style="color: #7f8c8d;">${customer.email}</small>
+                    </div>`
+                ).join('');
+                suggestions.style.display = 'block';
+            } else {
+                suggestions.style.display = 'none';
+            }
+        }
+
+        // Select customer
+        function selectCustomer(id, name, email) {
+            selectedCustomer = { id, name, email };
+            document.getElementById('customer').value = `${name} (${email})`;
+            document.getElementById('customer-suggestions').style.display = 'none';
+            document.getElementById('summary-customer').textContent = name;
+            updateSubmitButton();
+        }
+
+        // Update people count
+        function updatePeopleCount(change) {
+            peopleCount = Math.max(1, Math.min(10, peopleCount + change));
+            document.getElementById('people-count').textContent = peopleCount;
+            document.getElementById('number_of_people').value = peopleCount;
+            document.getElementById('summary-people').textContent = `${peopleCount} people`;
+            
+            // Update table availability based on capacity
+            updateTableAvailability();
+            updateSubmitButton();
+        }
+
+        // Update table availability based on party size
+        function updateTableAvailability() {
+            const tables = document.querySelectorAll('.table-option');
+            tables.forEach(table => {
+                const capacity = parseInt(table.dataset.capacity);
+                const isOccupied = table.classList.contains('occupied');
+                
+                if (!isOccupied) {
+                    if (capacity >= peopleCount) {
+                        table.classList.add('available');
+                        table.style.opacity = '1';
+                        table.onclick = () => selectTable(table);
+                    } else {
+                        table.classList.remove('available');
+                        table.style.opacity = '0.5';
+                        table.onclick = null;
+                    }
+                }
+            });
+        }
+
+        // Select table
+        function selectTable(tableElement) {
+            // Remove previous selection
+            document.querySelectorAll('.table-option').forEach(t => t.classList.remove('selected'));
+            
+            // Select new table
+            tableElement.classList.add('selected');
+            selectedTable = {
+                id: tableElement.dataset.tableId,
+                number: tableElement.querySelector('.table-number').textContent,
+                capacity: tableElement.dataset.capacity
+            };
+            
+            document.getElementById('selected_table').value = selectedTable.id;
+            document.getElementById('summary-table').textContent = selectedTable.number;
+            updateSubmitButton();
+        }
+
+        // Update submit button state
+        function updateSubmitButton() {
+            const submitBtn = document.getElementById('submit-btn');
+            const summaryStatus = document.getElementById('summary-status');
+            
+            if (selectedCustomer && selectedTable) {
+                submitBtn.disabled = false;
+                summaryStatus.textContent = 'Ready to book';
+                summaryStatus.style.color = '#27ae60';
+            } else {
+                submitBtn.disabled = true;
+                summaryStatus.textContent = 'Incomplete';
+                summaryStatus.style.color = '#e74c3c';
+            }
+        }
+
+        // Handle form submission
+        function handleBookingSubmit(event) {
+            event.preventDefault();
+            
+            // Simulate form submission
+            if (selectedCustomer && selectedTable) {
+                // Simulate success/failure based on random chance or specific conditions
+                const isSuccess = Math.random() > 0.3; // 70% success rate for demo
+                
+                if (isSuccess) {
+                    showSuccessPage();
+                } else {
+                    showErrorPage("The selected table is already booked or doesn't have enough capacity.");
+                }
+            }
+        }
+
+        // Show success page
+        function showSuccessPage() {
+            document.getElementById('success-customer').textContent = selectedCustomer.name;
+            document.getElementById('success-table').textContent = selectedTable.number;
+            document.getElementById('success-people').textContent = `${peopleCount} People`;
+            document.getElementById('success-time').textContent = new Date().toLocaleString();
+            
+            showPage('success-page');
+        }
+
+        // Show error page
+        function showErrorPage(reason) {
+            document.getElementById('error-reason').textContent = reason;
+            showPage('error-page');
+        }
+
+        // Show specific page
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // Navigation functions
+        function newBooking() {
+            // Reset form
+            selectedCustomer = null;
+            selectedTable = null;
+            peopleCount = 2;
+            
+            document.getElementById('customer').value = '';
+            document.getElementById('people-count').textContent = '2';
+            document.getElementById('number_of_people').value = '2';
+            document.getElementById('summary-customer').textContent = 'Not selected';
+            document.getElementById('summary-people').textContent = '2 people';
+            document.getElementById('summary-table').textContent = 'Not selected';
+            document.getElementById('summary-status').textContent = 'Incomplete';
+            document.getElementById('summary-status').style.color = '#e74c3c';
+            
+            document.querySelectorAll('.table-option').forEach(t => t.classList.remove('selected'));
+            document.getElementById('submit-btn').disabled = true;
+            
+            showPage('booking-form');
+        }
+
+        function tryAgain() {
+            showPage('booking-form');
+        }
+
+        function viewBookings() {
+            alert('Redirecting to bookings list...');
+        }
+
+        function viewAvailableTables() {
+            showPage('booking-form');
+        }
+
+        // Hide customer suggestions when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.customer-search')) {
+                document.getElementById('customer-suggestions').style.display = 'none';
+            }

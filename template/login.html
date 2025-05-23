@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Đăng nhập</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(135deg, #ffe1f0, #e6f0ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-box {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h2 {
+      color:#764ba2;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 2px solid #ffd6e8;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      border-color: #764ba2;
+      outline: none;
+    }
+
+    .btn {
+      width: 100%;
+      background: #764ba2;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #d15cff;
+    }
+
+    .error {
+      background: #ffe1e1;
+      color: #d8000c;
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .loading {
+      display: none;
+      margin-top: 10px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>Đăng nhập</h2>
+
+    {% if error %}
+      <div class="error" id="errorBox">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" onsubmit="showLoading()">
+      {% csrf_token %}
+      <input type="text" name="username" placeholder="Tên đăng nhập" required>
+      <input type="password" name="password" placeholder="Mật khẩu" required>
+      <button class="btn" type="submit">Đăng nhập</button>
+    </form>
+
+    <div class="loading" id="loadingBox">⏳ Đang kiểm tra thông tin...</div>
+  </div>
+
+  <script>
+    function showLoading() {
+      document.getElementById("loadingBox").style.display = "block";
+      const errorBox = document.getElementById("errorBox");
+      if (errorBox) {
+        errorBox.style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>
